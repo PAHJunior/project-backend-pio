@@ -14,12 +14,7 @@ export class SendMailService {
   async sendMail(data: SendMailDto): Promise<any> {
     this.logger.log(`Start send mail: from ${data.destination.split(',')}`);
     const transporter = nodemailer.createTransport({
-      host: 'SMTP.office365.com',
-      port: 587,
-      tls: {
-        ciphers: 'SSLv3',
-      },
-      secure: false,
+      service: 'hotmail',
       auth: {
         user: process.env.USER_MAIL,
         pass: process.env.USER_PASSWORD,
