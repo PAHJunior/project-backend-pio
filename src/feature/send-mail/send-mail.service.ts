@@ -1,8 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import * as nodemailer from 'nodemailer';
 import { SendMailDto } from './dto/send-mail.dto';
-import * as fs from 'fs';
-import * as path from 'path';
+import * as googleapis from 'googleapis';
+import { GetAccessTokenResponse } from 'google-auth-library/build/src/auth/oauth2client';
 
 @Injectable()
 export class SendMailService {
@@ -17,11 +17,15 @@ export class SendMailService {
         process.env.USER_MAIL
       }`,
     );
+
+    const { token } = await this.getToken();
+
     const transporter = nodemailer.createTransport({
-      service: 'hotmail',
+      service: 'gmail',
       auth: {
+        type: 'OAuth2',
         user: process.env.USER_MAIL,
-        pass: process.env.USER_PASSWORD,
+        accessToken: token,
       },
     });
 
@@ -47,5 +51,21 @@ export class SendMailService {
     return {
       message: 'Email successfully sent',
     };
+  }
+
+  private async getToken(): Promise<GetAccessTokenResponse> {
+    const CLIENT_ID = process.env.CLIENT_ID;
+    const CLIENT_SECRET = process.env.CLIENT_SECRET;
+    const REDIRECT_URI = process.env.REDIRECT_URI;
+    const REFRESH_TOKEN = process.env.REFRESH_TOKEN;
+
+    const oAuth2Client = new googleapis.google.auth.OAuth2(
+      CLIENT_ID,
+      CLIENT_SECRET,
+      REDIRECT_URI,
+    );
+    oAuth2Client.setCredentials({ refresh_token: REFRESH_TOKEN });
+
+    return await oAuth2Client.getAccessToken();
   }
 }
