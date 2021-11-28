@@ -9,6 +9,8 @@ async function bootstrap() {
   // Validation
   app.useGlobalPipes(new ValidationPipe());
 
+  app.enableCors();
+
   // Documentation
   SwaggerModule.setup(
     'docs',
