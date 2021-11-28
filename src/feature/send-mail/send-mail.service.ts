@@ -12,7 +12,11 @@ export class SendMailService {
    * Send Mail
    */
   async sendMail(data: SendMailDto): Promise<any> {
-    this.logger.log(`Start send mail: from ${data.destination.split(',')}`);
+    this.logger.log(
+      `Start send mail: from ${data.destination.split(',')} - ${
+        process.env.USER_MAIL
+      }`,
+    );
     const transporter = nodemailer.createTransport({
       service: 'hotmail',
       auth: {
