@@ -30,7 +30,7 @@ export class SendMailDto {
   public phoneNumber: string;
 
   @ApiProperty({
-    required: true,
+    required: false,
     type: String,
     description: 'observations',
   })

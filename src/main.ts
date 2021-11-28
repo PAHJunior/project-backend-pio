@@ -15,7 +15,10 @@ async function bootstrap() {
     app,
     SwaggerModule.createDocument(
       app,
-      new DocumentBuilder().setTitle('Back End PIO').build(),
+      new DocumentBuilder()
+        .setTitle('Back End PIO')
+        .setVersion('1.0.0')
+        .build(),
     ),
   );
 
